@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.vishnusivadas.advanced_httpurlconnection.PutData;
@@ -35,43 +36,47 @@ public class SignUp extends AppCompatActivity {
                 fullname = String.valueOf(textInputEditTextFullname.getText());
                 username = String.valueOf(textInputEditTextUsername.getText());
                 password = String.valueOf(textInputEditTextPassword.getText());
-                username = String.valueOf(textInputEditTextEmail.getText());
+                email = String.valueOf(textInputEditTextEmail.getText());
+
+                if (!fullname.equals("")&&!username.equals("")&& !password.equals("") && !email.equals("")) {
 
 
-                //Start ProgressBar first (Set visibility VISIBLE)
-                Handler handler = new Handler();
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        //Starting Write and Read data with URL
-                        //Creating array for parameters
-                        String[] field = new String[4];
-                        field[0] = "fullname";
-                        field[1] = "username";
-                        field[2] = "password";
-                        field[3] = "email";
+                    //Start ProgressBar first (Set visibility VISIBLE)
+                    Handler handler = new Handler();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Starting Write and Read data with URL
+                            //Creating array for parameters
+                            String[] field = new String[4];
+                            field[0] = "fullname";
+                            field[1] = "username";
+                            field[2] = "password";
+                            field[3] = "email";
 
-                        //Creating array for data
-                        String[] data = new String[4];
-                        data[0] = "data-1";
-                        data[1] = "data-2";
-                        data[0] = "data-1";
-                        data[1] = "data-2";
-                        PutData putData = new PutData("https://projects.vishnusivadas.com/AdvancedHttpURLConnection/putDataTest.php", "POST", field, data);
-                        if (putData.startPut()) {
-                            if (putData.onComplete()) {
-                                String result = putData.getResult();
-                                //End ProgressBar (Set visibility to GONE)
+                            //Creating array for data
+                            String[] data = new String[4];
+                            data[0] = "data-1";
+                            data[1] = "data-2";
+                            data[0] = "data-1";
+                            data[1] = "data-2";
+                            PutData putData = new PutData("https://projects.vishnusivadas.com/AdvancedHttpURLConnection/putDataTest.php", "POST", field, data);
+                            if (putData.startPut()) {
+                                if (putData.onComplete()) {
+                                    String result = putData.getResult();
+                                    //End ProgressBar (Set visibility to GONE)
 
+                                }
                             }
                         }
-            }
-        });
+                    });
 
-
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"All fields are required",Toast.LENGTH_SHORT).show();
+                }
                 //End Write and Read data with URL
             }
         });
-
-    }
+        }
 }
