@@ -2,10 +2,12 @@ package com.prantom.loginregister;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +19,8 @@ public class SignUp extends AppCompatActivity {
     TextInputEditText textInputEditTextFullname, textInputEditTextUsername, textInputEditTextPassword, textInputEditTextEmail;
     Button buttonSignup;
     TextView textviewLogin;
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,43 +32,54 @@ public class SignUp extends AppCompatActivity {
         textInputEditTextEmail = findViewById(R.id.textInputLayoutEmail);
         buttonSignup = findViewById(R.id.buttonSignUp);
         textviewLogin = findViewById(R.id.loginText);
+        progressBar = findViewById(R.id.progress);
 
         buttonSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String fullname, username, password, email;
+                final String fullname, username, password, email;
                 fullname = String.valueOf(textInputEditTextFullname.getText());
                 username = String.valueOf(textInputEditTextUsername.getText());
                 password = String.valueOf(textInputEditTextPassword.getText());
                 email = String.valueOf(textInputEditTextEmail.getText());
 
                 if (!fullname.equals("")&&!username.equals("")&& !password.equals("") && !email.equals("")) {
-
-
-                    //Start ProgressBar first (Set visibility VISIBLE)
+                    progressBar.setVisibility(View.VISIBLE);
                     Handler handler = new Handler();
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            //Starting Write and Read data with URL
-                            //Creating array for parameters
+
                             String[] field = new String[4];
                             field[0] = "fullname";
                             field[1] = "username";
                             field[2] = "password";
                             field[3] = "email";
 
-                            //Creating array for data
+
                             String[] data = new String[4];
-                            data[0] = "data-1";
-                            data[1] = "data-2";
-                            data[0] = "data-1";
-                            data[1] = "data-2";
-                            PutData putData = new PutData("https://projects.vishnusivadas.com/AdvancedHttpURLConnection/putDataTest.php", "POST", field, data);
+                            data[0] = fullname;
+                            data[1] = username;
+                            data[2] = password;
+                            data[3] = email;
+                            PutData putData = new PutData("https://http://192.168.43.74/LoginRegister/signup.php", "POST", field, data);
                             if (putData.startPut()) {
+
+
                                 if (putData.onComplete()) {
+                                    progressBar.setVisibility(View.GONE);
                                     String result = putData.getResult();
-                                    //End ProgressBar (Set visibility to GONE)
+                                    if (result.equals("Sign Up Success")){
+                                        Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(getApplicationContext(), Login.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                    else{
+                                        Toast.makeText(getApplicationContext(),result,Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    
 
                                 }
                             }
