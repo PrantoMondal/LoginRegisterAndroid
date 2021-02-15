@@ -90,7 +90,7 @@ public class SignUp extends AppCompatActivity {
                 else{
                     Toast.makeText(getApplicationContext(),"All fields are required",Toast.LENGTH_SHORT).show();
                 }
-                //End Write and Read data with URL
+
             }
         });
         }
